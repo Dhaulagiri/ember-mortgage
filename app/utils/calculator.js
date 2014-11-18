@@ -1,32 +1,49 @@
-export default function calculator(rate, numPayments, amountBorrowed) {
+export default function calculator(interestRate, loanTerm, loanAmount) {
 
-  rate = rate / 100 / 12;
-  numPayments = numPayments * 12;
+  interestRate = interestRate / 100 / 12;
+  loanTerm = loanTerm * 12;
   //amountBorrowed = 200000;
 
-  var monthlyPayment = (rate / (1 - (Math.pow((1 + rate), -(numPayments))))) * amountBorrowed;
+  var monthlyPayment = (interestRate / (1 - (Math.pow((1 + interestRate), -(loanTerm))))) * loanAmount;
   monthlyPayment = round(monthlyPayment);
 
-  //console.log('Monthly payment ' + round(monthlyPayment));
-  //console.log('Balance ' + amountBorrowed);
 
-  for (var i=0; i< numPayments; i++) {
+  var mortgage = {
+      monthlyPayment: monthlyPayment,
+      totalPayments: null,
+      totalInterest: null,
+      payments: []
+    };
 
-    var interestForMonth = round(amountBorrowed * rate);
+  for (var i=0; i< loanTerm; i++) {
+
+    var interestForMonth = round(loanAmount * interestRate);
     //console.log('Interest ' + round(interestForMonth));
 
     var principalForMonth = round(monthlyPayment - interestForMonth);
     //console.log('Principal ' + round(principalForMonth));
 
-    amountBorrowed -= principalForMonth;
+    loanAmount -= principalForMonth;
     //console.log('Balance ' + amountBorrowed + ' | ' + round(amountBorrowed));
     //console.log(amountBorrowed);
+
+    var payment = {
+      id: i + 1,
+      interest: interestForMonth,
+      principal: principalForMonth,
+      balance: round(loanAmount)
+    };
+
+    mortgage.payments.push(payment);
+    mortgage.totalInterest += round(interestForMonth);
+    mortgage.totalPayments += round(monthlyPayment);
   }
-  debugger
-  return monthlyPayment;
+
+  return mortgage;
 
 }
 
+// rounding convenience helper
 function round(value) {
   return Math.round(value * 100) / 100;
 }

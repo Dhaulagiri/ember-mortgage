@@ -1,24 +1,61 @@
-<form role="form">
-  <div class="form-group">
-    <label for="rate">Interest Rate</label>
-    {{input class="form-control" value=rate placeholder="Enter Interest Rate"}}
-  </div>
-  <div class="form-group">
-    <label for="rate">Amount Borrowed</label>
-    {{input class="form-control" value=amount placeholder="Enter The Amount You're Borrowing"}}
-  </div>
-  <div class="form-group">
-    <label for="rate">Enter The Loan Term</label>
-    {{input class="form-control" value=term placeholder="Enter The Term In Months"}}
-  </div>
-</form>
+<div class="col-lg-4">
+  <h3 class="text-center">Mortage Info</h3>
+  <form role="form">
+    <div class="form-group">
+      <label for="rate">Interest Rate</label>
+      {{input class="form-control" value=interestRate placeholder="Enter Interest Rate"}}
+    </div>
+    <div class="form-group">
+      <label for="rate">Amount Borrowed</label>
+      {{input class="form-control" value=loanAmount placeholder="Enter The Amount You're Borrowing"}}
+    </div>
+    <div class="form-group">
+      <label for="rate">Enter The Loan Term</label>
+      {{input class="form-control" value=loanTerm placeholder="Enter The Term In Months"}}
+    </div>
+  </form>
+  {{#if isTyping}}
+    You are typing...
+  {{else}}
+    {{#unless isValid}}
+    <span class="text-center">
+      Waiting on valid input...
+    </span>
+    {{/unless}}
+  {{/if}}
+</div>
 
-{{#if isTyping}}
-  You are typing...
-{{else}}
-  {{#unless isValid}}
-    Waiting on valid input...
-  {{/unless}}
-{{/if}}
-<br/>
-Payment amount: {{monthlyPayment}}
+<div class="col-lg-8">
+  {{#if isValid}}
+  <h3 class="text-center">Payment Info</h3>
+  <dl class="dl-horizontal">
+    <dt>Monthly Payment</dt>
+    <dd>{{monthlyPayment}}</dd>
+    <dt>Total Interest</dt>
+    <dd>{{totalInterest}}</dd>
+    <dt>Total Payments</dt>
+    <dd>{{totalPayments}}</dd>
+  </dl>
+    <br/>
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Payment #</th>
+          <th>Interest</th>
+          <th>Principal</th>
+          <th>Balance</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{#each this.payments}}
+          <tr>
+            <td>{{id}}</td>
+            <td>{{interest}}</td>
+            <td>{{principal}}</td>
+            <td>{{balance}}</td>
+          </tr>
+        {{/each}}
+      </tbody>
+    </table>
+  {{/if}}
+</div>
